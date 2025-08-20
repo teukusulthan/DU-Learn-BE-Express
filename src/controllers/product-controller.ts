@@ -1,6 +1,21 @@
 import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { prisma } from "../connection/client";
+import { error } from "console";
+
+export const getProduct = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+    const product = await prisma.product.findUnique({ where: { id } });
+
+    if (!product) {
+      res.status(404).json({ error: "Product not found" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch datas" });
+  }
+};
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
@@ -8,5 +23,17 @@ export const getProducts = async (req: Request, res: Response) => {
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch datas" });
+  }
+};
+
+export const createProduct = async (req: Request, res: Response) => {
+  try {
+    const { name, price } = req.body;
+    const product = await prisma.product.create({
+      data: { name, price: parseFloat(price) },
+    });
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create product" });
   }
 };
