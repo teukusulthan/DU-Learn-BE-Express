@@ -40,12 +40,8 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const updateProduct = async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id, 10);
     const { name, price } = req.body as { name?: string; price?: number };
-
-    if (price !== undefined && typeof price !== "number") {
-      return res.status(400).json({ error: "Price must be a number" });
-    }
 
     const product = await prisma.product.update({
       where: { id },
