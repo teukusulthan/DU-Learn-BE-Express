@@ -5,7 +5,7 @@ import { error } from "console";
 
 export const getProduct = async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id, 10);
     const product = await prisma.product.findUnique({ where: { id } });
 
     if (!product) {
@@ -35,5 +35,25 @@ export const createProduct = async (req: Request, res: Response) => {
     res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ error: "Failed to create product" });
+  }
+};
+
+export const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { name, price } = req.body as { name?: string; price?: number };
+
+    if (price !== undefined && typeof price !== "number") {
+      return res.status(400).json({ error: "Price must be a number" });
+    }
+
+    const product = await prisma.product.update({
+      where: { id },
+      data: { name, price },
+    });
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update product" });
   }
 };
