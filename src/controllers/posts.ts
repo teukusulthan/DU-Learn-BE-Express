@@ -15,7 +15,7 @@ export const getPosts = async (req: Request, res: Response) => {
   }
 };
 
-//GET /post/:id
+//GET /post/:id (pagination)
 export const getPostComments = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
@@ -55,7 +55,7 @@ export const getPostComments = async (req: Request, res: Response) => {
   }
 };
 
-// GET /posts/comments-summary
+// GET /posts/comments-summary (filter, pagination)
 export const getPostsCommentsSummary = async (req: Request, res: Response) => {
   try {
     const {
