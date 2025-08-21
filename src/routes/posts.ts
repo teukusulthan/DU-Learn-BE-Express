@@ -1,18 +1,14 @@
 import { Router } from "express";
 import {
   getPosts,
-  getPost,
-  createPost,
-  updatePost,
-  deletePost,
+  getPostComments,
+  getPostsCommentsSummary,
 } from "../controllers/posts";
 
 const router = Router();
 
 router.get("/posts", getPosts);
-router.get("/post/:id", getPost);
-router.post("/posts", createPost);
-router.patch("/post/:id", updatePost);
-router.delete("/post/:id", deletePost);
+router.get("/posts/comments-summary", getPostsCommentsSummary);
+router.get("/posts/:id/comments", getPostComments);
 
 export default router;
