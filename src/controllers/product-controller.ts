@@ -1,7 +1,5 @@
-import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { prisma } from "../connection/client";
-import { error } from "console";
 
 export const getProduct = async (req: Request, res: Response) => {
   try {
@@ -18,9 +16,29 @@ export const getProduct = async (req: Request, res: Response) => {
 };
 
 export const getProducts = async (req: Request, res: Response) => {
+  const { sortBy, order, minPrice, maxPrice, limit, offset } = req.query;
+
+  const filters: any = {};
+  if (minPrice) filters.price = { gte: parseFloat(minPrice as string) };
+  if (maxPrice) {
+    filters.price = {
+      ...(filters.price || {}),
+      lte: parseFloat(maxPrice as string),
+    };
+  }
+
   try {
-    const products = await prisma.product.findMany();
-    res.status(200).json(products);
+    const products = await prisma.product.findMany({
+      where: filters,
+      orderBy: {
+        [sortBy as string]: order as "asc" | "desc",
+      },
+      take: Number(limit),
+      skip: Number(offset),
+    });
+
+    const total = await prisma.product.count({ where: filters });
+    res.status(200).json({ data: products, total });
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch datas" });
   }
@@ -28,9 +46,9 @@ export const getProducts = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, price } = req.body;
+    const { name, price, stock } = req.body;
     const product = await prisma.product.create({
-      data: { name, price: parseFloat(price) },
+      data: { name, price: parseInt(price), stock },
     });
     res.status(201).json(product);
   } catch (error) {
@@ -41,11 +59,15 @@ export const createProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id, 10);
-    const { name, price } = req.body as { name?: string; price?: number };
+    const { name, price, stock } = req.body as {
+      name?: string;
+      price?: number;
+      stock?: number;
+    };
 
     const product = await prisma.product.update({
       where: { id },
-      data: { name, price },
+      data: { name, price, stock },
     });
 
     res.status(200).json(product);

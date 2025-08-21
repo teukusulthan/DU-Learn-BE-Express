@@ -1,6 +1,5 @@
 import express from "express";
-import router from "./routes/product.routes";
-import { log } from "console";
+import router from "./routes";
 
 const app = express();
 
