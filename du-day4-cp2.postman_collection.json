@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "666cbbe6-15c8-4d99-af17-0773e9c61fb4",
+		"name": "du-day4-cp2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47704185",
+		"_collection_link": "https://teukusulthan-2581716.postman.co/workspace/dumbways~2b5a852a-4879-4f83-8c60-f251fb0b6576/collection/47704185-666cbbe6-15c8-4d99-af17-0773e9c61fb4?action=share&source=collection_link&creator=47704185"
+	},
+	"item": [
+		{
+			"name": "update-suppliers-stock",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  { \"supplierId\": 6, \"productId\": 13, \"delta\": 20 },\n  { \"supplierId\": 7, \"productId\": 14, \"delta\": -10 }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/suppliers/stock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"suppliers",
+						"stock"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
