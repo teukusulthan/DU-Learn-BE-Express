@@ -1,0 +1,6 @@
+import express from "express";
+import { authenticate } from "../middlewares/auth";
+
+const router = express.Router();
+
+export default router;
